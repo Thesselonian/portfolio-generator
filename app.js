@@ -1,6 +1,7 @@
-const fs = require('fs');
+const generateSite = require('./utils/generate-site.js');
 const inquirer = require('inquirer');
 const generatePage = require('./src/page-template');
+const { copyFile } = require('fs');
 
 const promptUser = () => {
   return inquirer.prompt([
@@ -126,58 +127,21 @@ Add a New Project
     });
 };
 
-// promptUser()
-//   .then(promptProject)
-//   .then(portfolioData => {
-    // const pageHTML = generatePage(portfolioData);
-    // });
-    const mockData = {
-        name: 'Lernantino',
-        github: 'lernantino',
-        confirmAbout: true,
-        about:
-          'I am an amazing coder',
-        projects: [
-          {
-            name: 'Run Buddy',
-            description:
-              'cool description',
-            languages: ['HTML', 'CSS'],
-            link: 'https://github.com/lernantino/run-buddy',
-            feature: true,
-            confirmAddProject: true
-          },
-          {
-            name: 'Taskinator',
-            description:
-              'cool description',
-            languages: ['JavaScript', 'HTML', 'CSS'],
-            link: 'https://github.com/lernantino/taskinator',
-            feature: true,
-            confirmAddProject: true
-          },
-          {
-            name: 'Taskmaster Pro',
-            description:
-              'cool description',
-            languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
-            link: 'https://github.com/lernantino/taskmaster-pro',
-            feature: false,
-            confirmAddProject: true
-          },
-          {
-            name: 'Robot Gladiators',
-            description:
-              'cool description',
-            languages: ['JavaScript'],
-            link: 'https://github.com/lernantino/robot-gladiators',
-            feature: false,
-            confirmAddProject: false
-          }
-        ]
-      };
-    const pageHTML = generatePage(mockData);
-    fs.writeFile('./index.html', pageHTML, err => {
-      if (err) throw new Error(err);
-    });
-
+promptUser()
+  .then(promptProject)
+  .then(portfolioData => {
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+      return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+      console.log(writeFileResponse);
+      return copyFile();
+  })
+  .then(copyFileResponse => {
+      console.log(copyFileResponse);
+  })
+  .catch(err => {
+      console.log(err);
+  });
